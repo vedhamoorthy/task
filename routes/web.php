@@ -28,3 +28,5 @@ Route::post('/emailCheck', [RegisterController::class, 'checkEmail']);
 Route::get('/login', [AdminController::class, 'index']);
 Route::post('/login_process', [AdminController::class, 'login_process']);
 Route::get('/dashboard', [AdminController::class, 'dashboard']);
+Route::get('/users', [AdminController::class, 'Users'])->name('users');
+Route::get('/user/{id}', [AdminController::class, 'get_user_by_id']);

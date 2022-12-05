@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Admin;
 use Session;
+use View;
+// use Illuminate\Support\Facades\View;
 
 class AdminController extends Controller
 {
@@ -38,7 +40,7 @@ class AdminController extends Controller
             // dd($checkLogin);
             $je = json_decode(json_encode ( $checkLogin ) , true);
             // print_r($je['is_admin']);die('cc');
-            if($je['is_admin'] == 1){
+            if(isset($je['is_admin']) == 1){
                 Session::put('isUserLoggedIn', TRUE);
                 Session::put('User_info', $checkLogin);
                 return redirect('dashboard');
@@ -52,6 +54,29 @@ class AdminController extends Controller
     public function dashboard(Request $request){
 		if($request->session()->get('isUserLoggedIn')){
             return view('admin/dashboard');
+		}else{
+			redirect('login');
+		}
+	}
+    public function Users(Request $request){
+		if($request->session()->get('isUserLoggedIn')){
+			$data['result'] = Admin::getUsers();
+            return \View::make("admin/user")->with('data',$data);
+            // return Redirect::route('users')->with(['data'=> $data]);
+		}else{
+			redirect('login');
+		}
+	}
+    public function get_user_by_id(Request $request, $id){
+        // print_r($id);die('zz');
+		if($request->session()->get('isUserLoggedIn')){
+			$data['result'] = Admin::getUserById($id);
+            // print_r(json_decode(json_encode($data['result']), true));die('dddd');
+            if (is_array($data['result']) == 1){
+                return \View::make("admin/user_edit")->with('data',$data);
+            } else {
+                return \View::make("admin/user_edit")->with('data',$data);
+            }
 		}else{
 			redirect('login');
 		}

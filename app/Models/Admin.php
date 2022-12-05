@@ -25,4 +25,17 @@ class Admin extends Model
 
         return $result;
     }
+    public static function getUsers(){        
+        $result = DB::table('pro_registration_records')
+        ->get()
+        ->toArray();
+        return $result;
+    }
+    public static function getUserById($id){        
+        $result = DB::table('pro_registration_records')
+        ->where('id', $id)
+        ->get()
+        ->first();
+        return $result;
+    }
 }
